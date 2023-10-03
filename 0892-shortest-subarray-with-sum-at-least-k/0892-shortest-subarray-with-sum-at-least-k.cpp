@@ -2,28 +2,26 @@ class Solution {
 public:
     int shortestSubarray(vector<int>& nums, int k) {
         int n = nums.size();
-        int minsize = INT_MAX;
-        vector<long> prefixsum(n,0);
-        deque<int> dq;
+        long pref[n + 1];
         
-        prefixsum[0] = nums[0];
-        for(int i = 1;i<n;i++) prefixsum[i] = prefixsum[i-1] + nums[i];
-        for(int i = 0;i<n;i++){
-            if(prefixsum[i]>=k) 
-                minsize = min(minsize,i+1);
-            
-            while(!dq.empty() && prefixsum[i]-prefixsum[dq.front()]>=k){
-                minsize = min(minsize,i-dq.front());
+        pref[0] = 0;
+        for(int i = 1; i != n + 1; ++i)
+            pref[i] = pref[i - 1] + nums[i - 1];
+        
+        deque<int> dq;
+        int res = INT_MAX;
+        
+        dq.push_back(0);
+        for(int i = 1; i != n + 1; ++i) {
+            while(!dq.empty() && pref[dq.back()] >= pref[i])
+                dq.pop_back();
+            while(!dq.empty() && pref[i] - pref[dq.front()] >= k) {
+                res = min(res, i - dq.front());
                 dq.pop_front();
             }
-            
-            while(!dq.empty() && prefixsum[i]<=prefixsum[dq.back()]){
-                dq.pop_back();
-            }
-            
             dq.push_back(i);
         }
-        return (minsize==INT_MAX) ? -1 : minsize;
+        return res == INT_MAX ? -1 : res;
 
     }
 };
