@@ -7,15 +7,11 @@ public:
         int water=0;
 
         while(left<=right){
-            if(leftMax<rightMax){
-                if(height[left]>leftMax) leftMax=height[left];
-                else  water+= leftMax-height[left++];
-            }
-            
-            else{
-                if(height[right]>rightMax) rightMax=height[right];
-                else water+= rightMax-height[right--];
-            }
+            leftMax=max(leftMax,height[left]);
+            rightMax= max(rightMax,height[right]);
+
+            if(leftMax<=rightMax) water+= leftMax - height[left++];
+            else water+= rightMax - height[right--];
         }
         
         return water;
