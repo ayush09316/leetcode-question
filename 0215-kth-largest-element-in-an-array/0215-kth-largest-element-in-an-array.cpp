@@ -1,10 +1,10 @@
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        multiset<int, greater<int>> mset(nums.begin(), nums.end());
+        priority_queue<int> max_heap(nums.begin(), nums.end());
         for (int i = 0; i < k - 1; i++) {
-            mset.erase(mset.begin());
+            max_heap.pop();
         }
-        return *mset.begin();
+        return max_heap.top();
     }
 };
