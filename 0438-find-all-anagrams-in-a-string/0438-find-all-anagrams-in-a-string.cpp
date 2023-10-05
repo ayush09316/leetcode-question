@@ -1,19 +1,29 @@
 class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
-        vector<int> goal(26), cur(26), res;
-        int n=s.size() , m=p.size();
-
-        for(char ch : p) goal[ch - 'a']++;
-
-        for(int i = 0; i < n; i++) {
-
-            cur[s[i] - 'a']++;
-            if(i >= m) cur[s[i - m] - 'a']--;
-            if(cur == goal) res.push_back(i - m + 1);
-
+        int s_len = s.length();
+        int p_len = p.length();
+        
+        if(s.size() < p.size()) return {};
+        
+        vector<int> freq_p(26,0);
+        vector<int> window(26,0);
+        
+        //first window
+        for(int i=0;i<p_len;i++){
+            freq_p[p[i]-'a']++;
+            window[s[i]-'a']++;
         }
         
-        return res;
+        vector<int> ans;
+        if(freq_p == window) ans.push_back(0);
+        
+        for(int i=p_len;i<s_len;i++){
+            window[s[i-p_len] - 'a']--;
+            window[s[i] - 'a']++;
+            
+            if(freq_p == window) ans.push_back(i-p_len+1);
+        }
+        return ans;
     }
 };
