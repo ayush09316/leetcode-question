@@ -11,24 +11,34 @@
  */
 class Solution {
 public:
-    int preIndex = 0;
-    TreeNode* solve(vector<int>&pre,vector<int>&post,int start,int end,unordered_map<int,int>mp){
+    TreeNode* buildTreeHelper(vector<int>& preorder, int preStart, int preEnd, 
+                              vector<int>& postorder, int postStart, int postEnd, 
+                              unordered_map<int, int>& postMap) {
+
+        if (preStart > preEnd || postStart > postEnd)  return NULL;
+ 
+        TreeNode* root = new TreeNode(preorder[preStart]);
+ 
+        if (preStart == preEnd)  return root; 
         
-        if(start > end || preIndex >= pre.size())  return NULL;
-        
-        TreeNode* root = new TreeNode(pre[preIndex++]);
-        if(preIndex >= pre.size() || start == end)  return root;
-        int pos = mp[pre[preIndex]];
-        
-        root->left = solve(pre, post, start, pos,mp);
-        root->right = solve(pre, post, pos + 1, end - 1,mp);
-        
+        int leftRootVal = preorder[preStart + 1];
+        int leftRootIndexInPost = postMap[leftRootVal];
+        int leftSubtreeSize = leftRootIndexInPost - postStart + 1;
+ 
+        root->left = buildTreeHelper(preorder, preStart + 1, preStart + leftSubtreeSize, 
+                                     postorder, postStart, leftRootIndexInPost, postMap);
+        root->right = buildTreeHelper(preorder, preStart + leftSubtreeSize + 1, preEnd, 
+                                      postorder, leftRootIndexInPost + 1, postEnd - 1, postMap);
+ 
         return root;
     }
+
     TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
-        int n = preorder.size() , m = postorder.size();
-        unordered_map<int,int>mp;
-        for(int i=0;i<m;i++) mp[postorder[i]]=i;
-        return solve(preorder, postorder, 0, n - 1,mp);
+        unordered_map<int, int> postMap;
+        
+        for (int i = 0; i < postorder.size(); i++)  postMap[postorder[i]] = i;
+        
+        return buildTreeHelper(preorder, 0, preorder.size() - 1, 
+                              postorder, 0, postorder.size() - 1, postMap);
     }
 };
