@@ -10,22 +10,14 @@ public:
             return INT_MIN;
         }
         
-        if(dp[r1][c1][r2]!=-1)
-        {
-            return dp[r1][c1][r2];
-        }
+        if(dp[r1][c1][r2]!=-1)  return dp[r1][c1][r2];
         
-        if(r1==n-1 && c1==n-1)
-        {
-            return grid[r1][c1];
-        }
+        if(r1==n-1 && c1==n-1)  return grid[r1][c1];
         
         int ans=grid[r1][c1];
         
-        if(r1!=r2)
-        {
-            ans += grid[r2][c2];
-        }
+        if(r1!=r2)  ans += grid[r2][c2];
+        
         
         int temp= max(func(r1+1 , c1 , r2+1 , n , grid) , func(r1 , c1+1 , r2 , n , grid));
         temp = max(temp , func(r1+1 , c1 , r2 , n, grid));
@@ -35,6 +27,7 @@ public:
         
         return dp[r1][c1][r2]=ans;
     }
+    
     int cherryPickup(vector<vector<int>>& grid) {
         memset(dp , -1 , sizeof(dp));
         int n=grid.size();
