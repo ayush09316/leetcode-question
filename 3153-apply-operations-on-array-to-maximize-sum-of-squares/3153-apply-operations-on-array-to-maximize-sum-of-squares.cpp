@@ -1,27 +1,28 @@
+#define ll long long
 class Solution {
 public:
-    int mod = 1e9 + 7;
     int maxSum(vector<int>& nums, int k) {
-        vector <int> bits(32, 0);
-        int n = nums.size();
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < 32; j++){
-                bits[j] += (nums[i] >> j) & 1;
+       int n = nums.size();
+        vector<int> count(32,0);
+        for(int num : nums){
+            for(int i=0;i<32;i++){
+                if(num & (1 << i)) count[i]++;
             }
         }
 
-        long long ans = 0;
-        while(k--){
-            long long temp = 0;
-            for(long long i = 0; i < 32; i++){
-                if(bits[i] > 0){
-                    temp = (1 << i) | temp;
-                    bits[i]--;
+        ll res = 0, mod = 1e9 + 7;
+        for(int j = 0;j<k;j++){
+            ll x = 0;
+            for(int i=0;i<32;i++){
+                if(count[i] > 0){
+                    count[i]--;
+                    x |= (1 << i);
                 }
             }
-            temp = (temp * temp) % mod;
-            ans = (ans + temp) % mod;
+            res += x*x;
+            res %= mod;
         }
-        return ans;
+        return res;
     }
+    
 };
