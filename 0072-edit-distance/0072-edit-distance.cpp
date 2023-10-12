@@ -83,6 +83,7 @@ public:
     }
     int minDistance(string a, string b) {
         //return solve(word1,word2,0,0,dp);
-        return solveTab(a,b);
+       // return solveTab(a,b);
+       return solveTabSO(a,b);
     }
 };
