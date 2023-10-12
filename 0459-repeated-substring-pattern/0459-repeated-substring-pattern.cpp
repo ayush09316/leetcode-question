@@ -1,7 +1,7 @@
 class Solution {
 public:
     bool repeatedSubstringPattern(string s) {
-         string temp = s + s;
+        string temp = s + s;
         return temp.substr(1, s.length() * 2 - 2).find(s) != -1;
     }
 };
