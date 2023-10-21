@@ -1,18 +1,28 @@
 class Solution {
 public:
-    bool wordPattern(string pattern, string str) {
-         vector<int> pat_map (26, 0);
-        unordered_map<string,int> str_map;
-        int i=0, n = pattern.size();
-        istringstream ss (str);
-        string token;
+    bool wordPattern(string pattern, string s) {
+        unordered_map<string,char> m;
+        int a=0 , k=0;
+        string x;
+        s=s+" ";
+       
+        for(int i=0;i<s.length();i++){
+            if(s[i]!=' ')  x=x+s[i];
+            else{
+                a++;
+                if(m.find(x)==m.end()){
+                    for(auto it:m){
+                        if(it.second==pattern[k])  return false;
+                    }
+                    m[x]=pattern[k++];
+                }
+                else{
+                    if(m[x]!=pattern[k++])  return false;
+                }         
+                x="";              
+            }  
+        }   
+        return a!=pattern.size()? false : true;
         
-        for(string token; ss >> token; ++i) {
-            if(i == n || pat_map[pattern[i]-'a'] != str_map[token]) return false;
-            
-            pat_map[pattern[i]-'a'] = str_map[token] = i+1;
-        }
-        
-        return i == n;
     }
 };
